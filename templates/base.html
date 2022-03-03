@@ -1,0 +1,126 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html class="no-js" dir="rtl" lang="fa-IR">
+	<head>
+		<meta charset="UTF-8">
+		<title> فروشگاه لوازم الکترونیک </title>
+		<meta name="googlebot" content="index,follow">
+		<meta name="robots" content="noodp,noydir">
+		<meta name="apple-mobile-web-app-capable" content="yes" >
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    	<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
+		<link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-rtl.min.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/font-awesome.min.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/carousel.css' %}">
+		<link rel="stylesheet" type="text/css" href1="{% static 'css/owl.carousel.css' %}">
+		<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+        <script src="{% static 'js/jquery-v1.11.3.js' %}"></script>
+       
+	</head>
+	<body>
+		<script src="{% static 'js/modernizr.js' %}"></script>
+		<div class="top-nav">
+			<div class="container">
+                <div class="clearfix"></div>
+			</div>
+		</div>
+        <!-- site Header -->
+		<header class="header-site">
+            <div class="container">
+                <div class="col-md-7 col-sm-7 logo-layer">
+                    <a href="/">
+                    <h1>فروشگاه آنلاین <span>جنگو</span> </h1>
+                    </a>
+                </div>
+                <div class="clearfix"></div>
+            </div>         
+		</header>
+        <!-- End site Header -->
+        <!-- Mega Menu -->
+        <nav class="mega-menu">
+            <div class="container">
+                <span class="responsive-list"><i class="fa fa-th-list"></i></span>
+                <ul>
+                    <li><a href="#"> دسته بندی</a></li>
+                </ul>
+            </div>
+        </nav>
+
+        <div class="container margin-top-25">
+            <aside class="col-md-3 col-sm-4 right-side-content">
+                <!-- Basket -->
+                <section class="border-radius basket-side">
+                    <header><h3> سبد خرید شما  </h3></header>
+                    <article>
+                        <ul id="basket-list">
+                        </ul>
+                        <a href="/basket" class="show-basket-button border-radius">مشاهده سبد خرید</a>
+                    </article>
+                </section>
+                <!-- Category -->
+              
+                <section class="border-radius category-side">
+                    <header><h3> دسته بندی ها </h3></header>
+                        <article>
+                            <ul class="category-menu">
+                                {% for category in categories %}
+                                {% if category.parent_id == None %}
+                                <li>
+                                   <h2><a href="#">{{category.display_name}}</a></h2>
+                                   <ul class="child-category-menu">
+                                    {% for subCategory in categories %}
+                                        {% if subCategory.parent_id.id == category.id %}
+                                        <li><h2><a href="#">{{subCategory.display_name}}</a></h2></li>
+                                        {% endif %}
+                                    {% endfor %}
+                                   </ul>
+                                </li>
+                                {% endif %}
+                                {% endfor %}
+                            </ul>
+                        </article>
+                </section>
+                <!-- End Category -->
+            </aside>
+            <div class="col-md-9 col-sm-8 left-side-content">
+                {% block content %}
+                {% endblock %}
+            </div>
+        </div>
+
+
+            <footer >
+                <div class="top-footer bottom-footer">
+                    <div class="container">
+                       <section class="col-lg-4 col-md-4 contact-section">
+                          <header><h3> تماس با ما </h3></header>
+                          <article>
+                             <p><i class="fa fa-map-o"></i> نشانی :  تهران ،تهران تهران تهران </p>
+                             <p><i class="fa fa-volume-control-phone"></i> 021-2345678 </p>
+                             <p><i class="fa fa-envelope"></i> info@mail.com</p>
+                             <p><i class="fa fa-fax"></i> 021-987654 </p>
+                          </article>
+                       </section>
+                    </div>
+                </div>
+    
+              
+              </footer>
+    
+            <script src="{% static 'js/bootstrap.min.js' %}"></script>
+            <script src="{% static 'js/owl.carousel.js' %}"></script>
+            <script src="{% static 'js/script.js' %}"></script>
+         
+        </body>
+</html>
+    
+
+
+
+
+
+
+
+

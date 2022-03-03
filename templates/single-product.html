@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block content %}
+            <div class="col-md-9 col-sm-8 left-side-content">
+                <section class="single-page">
+                    <header><h3> {{product.name}} </h3> </header>
+                    <article>
+                        <!-- Detail -->
+                        <div class="col-md-8 col-sm-12 col-xs-12 pull-left detail-product">
+                            <div>
+                                <span> قیمت : {{product.price}} تومان </span>
+                                <button onClick="addToBasket({{product.id}})" class="add-to-card-link border-radius"> افزودن به سبد خرید </button>
+                            </div>  
+                            <p>
+                                {{product.short_description}}
+                            </p>
+                        </div>
+                        <!-- End Detail -->
+                        <!-- Gallery -->
+                        <div class="col-md-4 col-sm-12 col-xs-12 pull-right product-gallery">
+                            <div class="large-image border-radius">
+                                <img class="border-radius" src="/media/{{product.product_picture}}">
+                            </div>
+                            <div class="thumbnails-image">
+                                <div class="row">
+                                    <div class="col-md-3 col-sm-3 col-xs-4 border-radius"><img class="border-radius" src="/media/{{product.product_picture}}""></div>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End Gallery -->
+                        <div class="clearfix"></div>
+                    </article>
+                </section>
+
+
+                <div class="tabs-product margin-top-25">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a data-toggle="tab" href="#main-content"> توضیحات کامل </a></li>
+                    </ul>
+
+                    <div class="tab-content ">
+
+                        <!-- description -->
+                        <div id="main-content" class="tab-pane fade in active">
+                            <p>
+                                {{product.description}}
+                            </p>
+                           
+                        </div>
+                      
+                    </div>
+                </div>
+
+                <section class="border-radius tags-layer">
+                    {% for tag in tags %}
+                    <a href="">{{tag}}</a>
+                    {% endfor %}
+                  
+                </section>
+
+
+            </div>
+            <div class="clearfix"></div>
+
+        </div>
+<script >
+    function addToBasket(id){
+        var basket = JSON.parse(localStorage.getItem("basket")) || {};
+        if (basket[id]){
+            basket[id] += 1;
+        }else{
+            basket[id] =1;
+        }
+        localStorage.setItem("basket",JSON.stringify(basket));
+        window.location.reload();
+    }
+</script>
+
+{% endblock %}

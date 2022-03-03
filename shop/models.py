@@ -23,7 +23,7 @@ class Tag(models.Model):
 class Provider(models.Model):
     name = models.CharField(max_length=200)
     description = models.TextField()
-    logo = models.ImageField()
+    logo = models.ImageField(upload_to='Provider')
     phone_number = models.CharField(max_length=20)
     address = models.TextField()
 
@@ -35,6 +35,7 @@ class Product(models.Model):
     code = models.CharField(max_length=200)
     name = models.CharField(max_length=200)
     short_description = models.TextField()
+    product_picture = models.ImageField(upload_to='Product')
     description = models.TextField()
     price = models.IntegerField()
     count = models.IntegerField()
@@ -65,11 +66,11 @@ class Order(models.Model):
         default=uuid.uuid4,
         editable=False)
     status_list = [
-        ("INITIATED", "started"),
+        ("INITIATED", "شروع شده"),
         ("PAYMENT_SUCCESSFULL", "payment successfull"),
         ("PAYMENT_FAILS", "payment fails"),
-        ("DOING", "doing"),
-        ("COMPLETED", "compoleted"),
+        ("DOING", "در حال ارسال مرسوله"),
+        ("COMPLETED", " تحویل داده شده"),
     ]
     status = models.CharField(
         max_length=200, choices=status_list, default="INITIATED")

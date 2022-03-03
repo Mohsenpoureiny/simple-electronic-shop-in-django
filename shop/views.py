@@ -1,12 +1,67 @@
 import json
-from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseNotFound
+from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseNotFound, JsonResponse
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from .models import *
+from django.forms.models import model_to_dict
 
 
 def home(request):
-    return HttpResponse("Hi")
+    products = Product.objects.all()
+    categories = Category.objects.all()
+    return render(request, "index.html", {
+        "products": products,
+        "categories": categories
+    })
+
+
+def basket(request):
+    categories = Category.objects.all()
+
+    return render(request, "basket.html", {
+        "categories": categories
+    })
+
+
+def shop_status(request, id):
+    try:
+        categories = Category.objects.all()
+        order = Order.objects.filter(tracking_code=id).first()
+        return render(request, "shop-status.html", {
+            "level": order.get_status_display(),
+            "status": True,
+            "categories": categories
+        })
+    except:
+        return render(request, "shop-status.html", {
+            "status": False
+        })
+
+
+def product_detail(request, id):
+    product = Product.objects.filter(id=int(id)).first()
+    tags = product.tag.all()
+    categories = Category.objects.all()
+    return render(request, "single-product.html", {
+        "product": product,
+        "tags": tags,
+        "categories": categories
+    })
+
+
+def get_single_product_detail(request):
+    product = Product.objects.filter(
+        id=int(request.GET["id"])).first().__dict__
+    print(product)
+    # product["product_picture"] = str(product["product_picture"])
+    return JsonResponse({
+        "name": product["name"],
+        "short_description": product["short_description"],
+        "product_picture": str(product["product_picture"]),
+        "count": product["count"],
+        "price": product["price"],
+        "id": product["id"],
+    })
 
 
 @csrf_exempt

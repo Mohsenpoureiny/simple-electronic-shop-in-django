@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+{% block content %}
+
+        <!-- start content -->
+
+            <div class="row basket-style">
+                <section class="border-radius">
+                    <div class="tbl-head">
+                        <ul>
+                            <li> شرح محصول </li>
+                            <li> تعداد  </li>
+                            <li> قیمت واحد </li>
+                            <li> قیمت کل   </li>
+                        </ul>
+                    </div>
+                    <div class="hidden-head">
+                        سبد خرید شما
+                    </div>
+                    <div id="basket-tbl" class="tbl-body">
+                    </div>
+                    <div class="col-md-6 col-sm-6 col-xs-12 margin-top-25">
+                        <div class="form-group">
+                            <input id="name" type="text" class="form-control" placeholder="نام  ">
+                        </div>
+                        <div class="form-group">
+                            <input id="last_name" type="text" class="form-control" placeholder="نام خانوادگی ">
+                        </div>
+                        <div class="form-group">
+                            <input id="passport_id" type="text" class="form-control" placeholder="کد ملی ">
+                        </div>
+                        <div class="form-group">
+                            <input id="phone_number" type="text" class="form-control" placeholder="شماره تلفن">
+                        </div>
+                        <div class="form-group">
+                            <textarea id="address" type="text" class="form-control" placeholder="آدرس"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <input id="post_code" type="text" class="form-control" placeholder="کد پستی">
+                        </div>
+                    </div>
+                    <button onclick="completeOrder()" type="button" class="border-radius submit-basket-button"> پرداخت </button>
+                    <div class="clearfix"></div>
+                </section>
+            </div>
+            <script defer>
+                var basketInfo = localStorage.getItem("basket");
+                if (basketInfo) {
+                    var basket = JSON.parse(basketInfo);
+                    Object.keys(basket).forEach(async function (element) {
+                        var product = await getSingleProductInfo(element);
+                        var toAppend = `<ul>
+                            <li> 
+                                <a href="" class="product-image"><img class="border-radius" src="/media/${product?.product_picture}"></a>
+                                <div class="product-info-left-side">
+                                    <a href="" class="product-title"> <h3> ${product?.name}</h3> </a>
+                                </div>
+                            </li>
+                            <li> 
+                                <p> 
+                                    ${basket[element]} 
+                                </p>
+                            </li>
+                            <li> 
+                                <label class="lbl-hidden"> قیمت واحد : </label> <span class="lbl-price"> ${product?.price } تومان </span>
+                            </li>
+                            <li> 
+                                <label class="lbl-hidden"> قیمت کل : </label> <span class="lbl-price"> ${product?.price * basket[element]} تومان </span>
+
+                                <button onclick="deleteFromBasket(${product?.id})"class="delete-button" >X</button>
+                            </li>
+                        </ul>`;
+                        $("#basket-tbl").append(toAppend);
+                    });
+                }
+                async function getSingleProductInfo(id) {
+                    var data = await $.ajax("/product?id=" + id);
+                    return data;
+                }
+                function deleteFromBasket(id) {
+                    var basket = JSON.parse(localStorage.getItem('basket'));
+                    delete basket[id];
+                    localStorage.setItem('basket',JSON.stringify(basket));
+                    window.location.reload();
+                }
+                async function completeOrder(id) {
+                    var basket = JSON.parse(localStorage.getItem('basket'));
+                    localStorage.removeItem('basket');
+                    
+                    var products = Object.keys(basket).map(function (val) {
+                        return {
+                            id:val,
+                            count:basket[val]
+                        }
+                    });
+                    var data = await $.ajax('/order/',{
+                    'data': JSON.stringify({
+                        customer:{
+                            name:$("#name").val(), 
+                            last_name:$("#last_name").val(),
+                            passport_id:$("#passport_id").val(),
+                            phone_number:$("#phone_number").val(),
+                            address:$("#address").val(), 
+                            post_code:$("#post_code").val()
+                        },
+                        products:products
+                    }), 
+                    'type': 'POST',
+                    'processData': false,
+                    'contentType': 'application/json' 
+                });
+                    window.location.href = "/shop-status/"+data ;
+                }
+            </script>
+
+        <!-- End content -->    
+
+{% endblock %}

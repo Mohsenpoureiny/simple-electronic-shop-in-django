@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+
+
+{% if status %}
+<div class="alert alert-success" role="alert">
+    تبریک! 
+    <br/>
+    وضعیت سفارش شما در مرحله :{{level}}
+    <br/>
+    <a href="#" id="tracking-link">لینک پیگیری سفارش</a> 
+ </div>
+{% else %}
+ <div class="alert alert-danger" role="alert">
+    کد پیگیری نادرست است.
+  </div>
+{% endif %}
+
+<script>
+    if ($("tracking-link")){
+        $("#tracking-link").attr("href", window.location.href)
+    }
+</script>
+
+
+
+
+
+{% endblock %}
