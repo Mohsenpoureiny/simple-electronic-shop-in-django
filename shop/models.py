@@ -45,7 +45,7 @@ class Product(models.Model):
     creation_time = models.DateTimeField()
 
     def __str__(self) -> str:
-        return f"{self.name} {self.code}"
+        return self.name
 
 
 class Customer(models.Model):
